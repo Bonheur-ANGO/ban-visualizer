@@ -1,0 +1,72 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 80%;
+  width: 80%;
+  margin: auto;
+}
+
+.dropdown {
+  z-index: 100;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #000;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+.dropdown li {
+  cursor: pointer;
+  height: 50px;
+  flex-direction: column;
+  padding: 5px;
+  list-style-type: none;
+  display: flex;
+}
+
+.dropdown li span {
+  font-weight: bold;
+}
+
+.dropdown li:hover {
+  background-color: #b0c4de;
+}
+
+.dropdown ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.panel {
+  width: 800px;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  display: flex;
+}
+
+.panel input[type="text"] {
+  height: 30px;
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.sep {
+  margin-top: 20px;
+}
+
+.test {
+  flex-direction: column;
+  justify-content: center;
+  display: flex;
+  position: relative;
+}
+
+/*# sourceMappingURL=index.b2625c6b.css.map */
