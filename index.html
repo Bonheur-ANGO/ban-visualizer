@@ -9,8 +9,13 @@
   </head>
   <body>
   
-      <div class="col-3 mx-auto">
-      <input type="text" class="form-control" id="adress" placeholder="Adresse">
+      <div class="col-3 mx-auto d-flex flex-column justify-content-center align-items-center position-relative" id="form">
+      <input type="text" class="form-control" id="adress" placeholder="Adresse" autocomplete="off">
+      <div id="proposition" style="display: none;" class="dropdown">
+        <ul id="proposition-container">
+          
+        </ul>
+      </div>
       </div>
     <div id="map" class="mt-4"></div>
     <script type="module" src="js/index.js"></script>
