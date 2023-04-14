@@ -63,12 +63,13 @@ const proposition = document.getElementById("proposition");
 let ul = document.getElementById('proposition-container');
 
 function createMarker(element) {
-  let newVectorLayer = new VectorTileLayer({
+  /*let newVectorLayer = new VectorTileLayer({
     source: [element]
-  })
+  })*/
 
-  return newVectorLayer
+  return element
 }
+
 
 
 
@@ -96,7 +97,9 @@ function displayProposition(response) {
             ul.innerHTML = ""
             input.innerHTML = ""
 
-            
+            /*let layer = new VectorTileLayer({
+              source
+            })*/
             //map.addLayer(newVectorLayer)
             //console.log(feature);
           })
@@ -113,7 +116,7 @@ function getFeaturesAndAutocomplete() {
     .then((response) => {
       if (response.ok) {
         response.json().then((data) => {
-          console.log(data);
+          //console.log(data);
           displayProposition(data)
         })
       }
@@ -124,5 +127,14 @@ function getFeaturesAndAutocomplete() {
   
 }
 
+//getFeaturesAndAutocomplete()
 
-getFeaturesAndAutocomplete()
+
+async function getAllFeatures() {
+  const response = await fetch("data=@adress.csv https://api-adresse.data.gouv.fr/search/csv/");
+  const json = await response;
+  return json.length
+}
+
+
+console.log(getAllFeatures());

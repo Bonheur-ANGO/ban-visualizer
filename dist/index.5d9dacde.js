@@ -622,12 +622,9 @@ const input = document.getElementById("adress");
 const proposition = document.getElementById("proposition");
 let ul = document.getElementById("proposition-container");
 function createMarker(element) {
-    let newVectorLayer = new (0, _vectorTileDefault.default)({
-        source: [
-            element
-        ]
-    });
-    return newVectorLayer;
+    /*let newVectorLayer = new VectorTileLayer({
+    source: [element]
+  })*/ return element;
 }
 function displayProposition(response) {
     if (Object.keys(response.features).length > 0) {
@@ -647,7 +644,9 @@ function displayProposition(response) {
                 viewFeatureAndCenterMap(element);
                 ul.innerHTML = "";
                 input.innerHTML = "";
-            //map.addLayer(newVectorLayer)
+            /*let layer = new VectorTileLayer({
+              source
+            })*/ //map.addLayer(newVectorLayer)
             //console.log(feature);
             });
         });
@@ -657,7 +656,7 @@ function getFeaturesAndAutocomplete() {
     input.addEventListener("input", ()=>{
         fetch(`https://api-adresse.data.gouv.fr/search/?q=${input.value}&autocomplete=1`).then((response)=>{
             if (response.ok) response.json().then((data)=>{
-                console.log(data);
+                //console.log(data);
                 displayProposition(data);
             });
         }).catch((error)=>{
@@ -665,7 +664,13 @@ function getFeaturesAndAutocomplete() {
         });
     });
 }
-getFeaturesAndAutocomplete();
+//getFeaturesAndAutocomplete()
+async function getAllFeatures() {
+    const response = await fetch("data=@adress.csv https://api-adresse.data.gouv.fr/search/csv/");
+    const json = await response;
+    return json.length;
+}
+console.log(getAllFeatures());
 
 },{"ol/Map.js":"14YFC","ol/layer/Tile.js":"3ytzs","ol/View.js":"8xbkS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","ol/proj":"SznqC","./layer/createLayer":"3rcE6","./layer/styleLayer":"cNaxt","ol/layer":"7gUkr","ol/Feature":"liabO","ol/style":"hEQxF","ol/style/Icon":"dJiIs","ol/layer/VectorTile":"6rnkA"}],"14YFC":[function(require,module,exports) {
 /**
