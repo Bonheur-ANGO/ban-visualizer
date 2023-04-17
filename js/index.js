@@ -1,14 +1,18 @@
 import Map from 'ol/Map.js';
-import Vector from 'ol/layer';
+import VectorTileSource from 'ol/source/VectorTile';
+import Vector, { VectorTile } from 'ol/layer';
 import TileLayer from 'ol/layer/Tile.js';
 import Feature from 'ol/Feature';
 import VectorTileLayer from 'ol/layer/VectorTile';
 import View from 'ol/View.js';
-import {Style} from 'ol/style';
+import {Circle, Fill, Stroke, Style} from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 import { createLayer } from './layer/createLayer';
 import { styleLayer } from './layer/styleLayer';
 import Icon from 'ol/style/Icon';
+import MVT from 'ol/format/MVT';
+import { createXYZ } from "ol/tilegrid"
+import { inflate } from 'pako';
 
 
 //fichier de style PLAN IGN
@@ -18,8 +22,45 @@ let standard = 'https://wxs.ign.fr/static/vectorTiles/styles/PLAN.IGN/essentiels
 let plan_ign = createLayer('https://wxs.ign.fr/essentiels/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf', standard, 'plan_ign');
 
 
+let vectorTileSource = new VectorTileSource({
+  url: 'https://plateforme.adresse.data.gouv.fr/tiles/ban/{z}/{x}/{y}.pbf',
+  format: new MVT(),
+  tileGrid: createXYZ({
+    minZoom: 1, 
+    maxZoom: 1
+  })
+});
+
+let vectorTileLayer = new VectorTile({
+  source: vectorTileSource,
+  declutter: true,
+  
+  visible: true,
+  style: function(feature) {
+    if (feature.get('type') === 'housenumber') {
+      return new Style({
+        image: new Circle({
+          radius: 5,
+          fill: new Fill({
+            color: 'red'
+          }),
+          stroke: new Stroke({
+            color: 'black',
+            width: 1
+          })
+        })
+      });
+    }
+  }
+});
+
+/*fetch('../file.json')
+    .then((response) => console.log(response))
+    .then((json) => console.log(json));*/
+
+
 //tableau de couches
-let layers = [plan_ign];
+let layers = [plan_ign, vectorTileLayer];
 
 
 //création de la carte
@@ -35,18 +76,20 @@ var map = new Map({
 
 styleLayer(map.getLayers().array_)
 
-let styles = {
+
+console.log(map.getLayers().array_);
+
+/*let styles = {
   Point: new Style({
     image: new Icon({
       anchor: [0.5, 1],
       src: 'https://cdn0.iconfinder.com/data/icons/small-n-flat/24/678111-map-marker-64.png',
     }),
   }),
-};
+};*/
 
 
 function viewFeatureAndCenterMap(feature) {
-  //map.handleMapBrowserEvent(transform(fromLonLat(coordinates), 'EPSG:4326', 'EPSG:3857'))
 
   let view = map.getView()
 
@@ -92,7 +135,7 @@ function displayProposition(response) {
           ul.appendChild(li);
 
           li.addEventListener('click', () => {
-            //console.log(element);
+            
             viewFeatureAndCenterMap(element)
             ul.innerHTML = ""
             input.innerHTML = ""
@@ -130,11 +173,11 @@ function getFeaturesAndAutocomplete() {
 //getFeaturesAndAutocomplete()
 
 
-async function getAllFeatures() {
+/*async function getAllFeatures() {
   const response = await fetch("data=@adress.csv https://api-adresse.data.gouv.fr/search/csv/");
   const json = await response;
   return json.length
 }
 
 
-console.log(getAllFeatures());
+console.log(getAllFeatures());*/

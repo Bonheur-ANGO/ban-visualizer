@@ -2,6 +2,8 @@
   "dependencies": {
     "ol": "^7.3.0",
     "ol-mapbox-style": "^10.4.0",
+    "pako": "^2.1.0",
+    "papaparse": "^5.4.1",
     "parcel": "^2.8.3"
   },
   "name": "ban-visualizer",
