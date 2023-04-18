@@ -1,4 +1,5 @@
 import Map from 'ol/Map.js';
+import GeoJSON from 'ol/format/GeoJSON';
 import VectorTileSource from 'ol/source/VectorTile';
 import Vector, { VectorTile } from 'ol/layer';
 import TileLayer from 'ol/layer/Tile.js';
@@ -11,22 +12,26 @@ import { createLayer } from './layer/createLayer';
 import { styleLayer } from './layer/styleLayer';
 import Icon from 'ol/style/Icon';
 import MVT from 'ol/format/MVT';
+import WFS from 'ol/format/WFS';
 import { createXYZ } from "ol/tilegrid"
-import { inflate } from 'pako';
+import Papa from 'papaparse';
+import pako from 'pako';
 
 
 //fichier de style PLAN IGN
 let standard = 'https://wxs.ign.fr/static/vectorTiles/styles/PLAN.IGN/essentiels/standard.json';
 
 //fond de carte
-let plan_ign = createLayer('https://wxs.ign.fr/essentiels/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf', standard, 'plan_ign');
+let plan_ign = createLayer('https://wxs.ign.fr/essentiels/geoportail/tms/1.0.0/PLAN.IGN/{z}/{x}/{y}.pbf', standard, 'plan_ign', new MVT());
 
 
-let vectorTileSource = new VectorTileSource({
+
+
+/*let vectorTileSource = new VectorTileSource({
   url: 'https://plateforme.adresse.data.gouv.fr/tiles/ban/{z}/{x}/{y}.pbf',
   format: new MVT(),
   tileGrid: createXYZ({
-    minZoom: 1, 
+    minZoom: 1,
     maxZoom: 1
   })
 });
@@ -34,7 +39,7 @@ let vectorTileSource = new VectorTileSource({
 let vectorTileLayer = new VectorTile({
   source: vectorTileSource,
   declutter: true,
-  
+
   visible: true,
   style: function(feature) {
     if (feature.get('type') === 'housenumber') {
@@ -52,15 +57,10 @@ let vectorTileLayer = new VectorTile({
       });
     }
   }
-});
-
-/*fetch('../file.json')
-    .then((response) => console.log(response))
-    .then((json) => console.log(json));*/
-
+});*/
 
 //tableau de couches
-let layers = [plan_ign, vectorTileLayer];
+let layers = [plan_ign];
 
 
 //création de la carte
@@ -70,14 +70,38 @@ var map = new Map({
   view: new View({
     maxZoom: 25,
     center: fromLonLat([1.8883335, 46.603354]),
-    zoom: 5
-  })
+    zoom: 5  })
 });
 
 styleLayer(map.getLayers().array_)
 
 
-console.log(map.getLayers().array_);
+//style couche ban
+/*var style = new Style({
+  image: new Circle({
+      radius: 5,
+      fill: new Fill({
+          color: 'blue'
+      }),
+      stroke: new Stroke({
+          color: 'white',
+          width: 1
+      })
+  }),
+  stroke: new Stroke({
+      color: 'blue',
+      width: 2
+  }),
+  fill: new Fill({
+      color: 'rgba(0, 0, 255, 0.1)'
+  })
+});
+let coucheWFS = createLayer('https://wxs.ign.fr/adresse/geoportail/wfs?service=WFS&version=2.0.0&request=GetCapabilities&typeName=adresse&outputFormat=application/json', null, 'BAN', new WFS(), style)
+*/
+
+
+
+//console.log(map.getLayers().array_);
 
 /*let styles = {
   Point: new Style({
@@ -170,14 +194,29 @@ function getFeaturesAndAutocomplete() {
   
 }
 
+let xhr = new XMLHttpRequest()
+
+xhr.open("GET", "../adresses-01.csv.gz")
+xhr.responseType = "arraybuffer"
+
+xhr.onload = function() {
+  
+  if (this.status === 200) {
+    // Décompresser le fichier gzip
+    const csvData = pako.inflate(new Uint8Array(this.response), { to: 'string' });
+    console.log(csv
+      );    // Traiter les données CSV
+    Papa.parse(csvData, {
+      delimiter: ',',
+      header: true,
+      complete: function(results) {
+        //console.log(results.data);
+      }
+    });
+  }
+};
+xhr.send();
+
 //getFeaturesAndAutocomplete()
 
 
-/*async function getAllFeatures() {
-  const response = await fetch("data=@adress.csv https://api-adresse.data.gouv.fr/search/csv/");
-  const json = await response;
-  return json.length
-}
-
-
-console.log(getAllFeatures());*/

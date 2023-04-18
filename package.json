@@ -4,7 +4,8 @@
     "ol-mapbox-style": "^10.4.0",
     "pako": "^2.1.0",
     "papaparse": "^5.4.1",
-    "parcel": "^2.8.3"
+    "parcel": "^2.8.3",
+    "zlib": "^1.0.5"
   },
   "name": "ban-visualizer",
   "version": "1.0.0",
@@ -18,6 +19,12 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "buffer": "^5.7.1"
+    "assert": "^2.0.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^5.7.1",
+    "events": "^3.3.0",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.5"
   }
 }
